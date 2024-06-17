@@ -70,6 +70,6 @@ public class User {
         this.password = password;
     }
 
-    //gerar hash code e equals
+    //hash code e equals faltando
 
 }
