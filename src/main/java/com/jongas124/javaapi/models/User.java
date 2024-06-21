@@ -1,12 +1,14 @@
 package com.jongas124.javaapi.models;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "users")
 
 public class User {
-    public interface CreateUser{}
-    public interface UpdateUser{}
+    public interface CreateUser{} //<-- adicionar interface para create
+    public interface UpdateUser{} //<-- adicionar interface para update
 
     public static final String TABLE_NAME = "users";
     
@@ -35,15 +37,15 @@ public class User {
     private String username;
     
     //alterar para hash
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //não entendi
     @Column(name = "password", length = 100, nullable = false)
     @NotNull(groups = {CreateUser.class, UpdateUser.class})
     @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
     @Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 100)
     private String password;
 
-    //private List<Task> tasks = new ArrayList<Task>()
-
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks = new ArrayList<Task>();
     public User() {}
     
     public Long getId() {
