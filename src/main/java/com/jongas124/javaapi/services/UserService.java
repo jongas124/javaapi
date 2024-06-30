@@ -20,6 +20,14 @@ public class UserService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Transactional
+    public User create(User obj) {
+        obj.setId(null);
+        obj = this.userRepository.save(obj);
+        this.taskRepository.saveAll(obj.getTasks());
+        return obj;
+    }
+
     public User findById(Long id) {
         Optional<User> user = this.userRepository.findById(id);
         if(user.isPresent()) {
@@ -27,14 +35,6 @@ public class UserService {
         } else {
             throw new RuntimeException("User not found! Id: " + id);
         }
-    }
-
-    @Transactional
-    public User create(User obj) {
-        obj.setId(null);
-        obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
-        return obj;
     }
 
     @Transactional
