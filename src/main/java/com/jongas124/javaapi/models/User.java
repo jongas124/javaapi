@@ -73,6 +73,14 @@ public class User {
         this.password = password;
     }
 
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
+
     //hash code e equals faltando
 
 }
