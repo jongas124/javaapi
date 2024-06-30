@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jongas124.javaapi.models.User;
-import com.jongas124.javaapi.repositories.TaskRepository;
 import com.jongas124.javaapi.repositories.UserRepository;
 
 
@@ -17,14 +16,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
-
     @Transactional
     public User create(User obj) {
         obj.setId(null);
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
         return obj;
     }
 
