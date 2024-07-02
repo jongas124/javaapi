@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -76,7 +77,8 @@ public class User {
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
-
+    
+    @JsonIgnore
     public List<Task> getTasks() {
         return this.tasks;
     }
