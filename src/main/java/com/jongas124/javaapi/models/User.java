@@ -37,12 +37,13 @@ public class User {
     @Size(groups = CreateUser.class ,min = 4, max = 64)
     private String username;
     
-    //alterar para hash
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //não entendi
+    //não permite que a senha seja exibidade em uma requisição JSON
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
     @Column(name = "password", length = 100, nullable = false)
     @NotNull(groups = {CreateUser.class, UpdateUser.class})
     @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
     @Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 100)
+    //alterar para hash
     private String password;
 
     @OneToMany(mappedBy = "user")

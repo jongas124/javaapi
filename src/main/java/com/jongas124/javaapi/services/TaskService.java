@@ -1,5 +1,6 @@
 package com.jongas124.javaapi.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,16 @@ public class TaskService {
 
     public Task findById(Long id) {
         Optional<Task> task = this.taskRepository.findById(id);
-        findById(id);
         if(task.isPresent()) {
             return task.get();
         } else{
         throw new RuntimeException("Task não encontrada!");
         }
+    }
+
+    public List<Task> findAllByUserId(Long userId) {
+        List<Task> tasks = this.taskRepository.findByUser_Id(userId);
+        return tasks;
     }
 
     @Transactional
@@ -41,7 +46,7 @@ public class TaskService {
 
     @Transactional
     public Task update(Task obj) {
-       Task newObj =  this.findById(obj.getId());  
+       Task newObj =  this.findById(obj.getId());
        newObj.setDescricao(obj.getDescricao());
        return this.taskRepository.save(newObj);
     }
