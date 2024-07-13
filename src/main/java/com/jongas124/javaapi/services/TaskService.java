@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jongas124.javaapi.models.Task;
 import com.jongas124.javaapi.models.User;
 import com.jongas124.javaapi.repositories.TaskRepository;
+import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -26,7 +27,7 @@ public class TaskService {
         if(task.isPresent()) {
             return task.get();
         } else{
-        throw new RuntimeException("Task não encontrada!");
+        throw new ObjectNotFoundException("Task não encontrada!");
         }
     }
 

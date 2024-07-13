@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jongas124.javaapi.models.User;
 import com.jongas124.javaapi.repositories.UserRepository;
+import com.jongas124.javaapi.services.exceptions.DataBindingViolationException;
+import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
 
 
 @Service
@@ -28,7 +30,7 @@ public class UserService {
         if(user.isPresent()) {
             return user.get();
         } else {
-            throw new RuntimeException("User not found! Id: " + id);
+            throw new ObjectNotFoundException("User not found! Id: " + id);
         }
     }
 
@@ -44,7 +46,7 @@ public class UserService {
         try {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possível excluir excluir pois há entidades (tasks) relacioandas Id: " + id);
+            throw new DataBindingViolationException("Não é possível excluir excluir pois há entidades (tasks) relacioandas Id: " + id);
         }
     }
 
