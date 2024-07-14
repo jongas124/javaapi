@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -65,8 +66,8 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "profile", nullable = false)
+    @CollectionTable(name = "user_profiles")
     @NotNull(groups = {CreateUser.class, UpdateUser.class})
-    @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
     private Set<Integer> profiles = new HashSet<>();
 
     public Set<ProfileEnum> getProfiles() {

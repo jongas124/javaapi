@@ -27,7 +27,7 @@ public class UserService {
     @Transactional
     public User create(User obj) {
         obj.setId(null);
-        obj.setPassword(argon2PasswordEncoder.encode(obj.getPassword()));
+        obj.setPassword(obj.getPassword());
         obj.setProfiles(Collections.singleton(ProfileEnum.USER.getCode()));
         obj = this.userRepository.save(obj);
         return obj;

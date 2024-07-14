@@ -45,13 +45,11 @@ public class SecurityConfig {
                 .requestMatchers(PUBLIC_MATCHERS).permitAll()
                 .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .anyRequest().authenticated()
-            );
-            // .formLogin(formLogin -> formLogin
-            //     .loginPage("/login")
-            //     .permitAll()
-            // );
-
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            )
+            .formLogin(formLogin -> formLogin
+                .loginPage("/login")
+                .permitAll()
+            ).csrf((csrf) -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
