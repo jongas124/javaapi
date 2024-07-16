@@ -29,7 +29,7 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+    @Column(name = "task_id", unique = true)
     private Long id;
     
     @ManyToOne

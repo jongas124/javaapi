@@ -2,23 +2,31 @@ package com.jongas124.javaapi.config;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.jongas124.javaapi.util.Argon2Encoder;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
     
     private static final String[] PUBLIC_MATCHERS = {
             "/"
@@ -28,18 +36,13 @@ public class SecurityConfig {
             "/user"
     };
 
-    private static final int DEFAULT_SALT_LENGTH = 16;
-
-	private static final int DEFAULT_HASH_LENGTH = 32;
-
-	private static final int DEFAULT_PARALLELISM = 1;
-
-	private static final int DEFAULT_MEMORY = 32768;
-
-	private static final int DEFAULT_ITERATIONS = 2;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // AuthenticationManagerBuilder authenticationManagerBuilder = http
+        // .getSharedObject(AuthenticationManagerBuilder.class);
+        // authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(argon2Encoder());
+        // this.authenticationManager = authenticationManagerBuilder.build();
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(PUBLIC_MATCHERS).permitAll()
@@ -49,7 +52,8 @@ public class SecurityConfig {
             .formLogin(formLogin -> formLogin
                 .loginPage("/login")
                 .permitAll()
-            ).csrf((csrf) -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            ).csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
@@ -64,9 +68,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public Argon2PasswordEncoder argon2PasswordEncoder() {
-        return new Argon2PasswordEncoder(DEFAULT_SALT_LENGTH, DEFAULT_HASH_LENGTH, DEFAULT_PARALLELISM, DEFAULT_MEMORY,
-        DEFAULT_ITERATIONS);
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+            return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public Argon2Encoder argon2Encoder() {
+        return new Argon2Encoder();
+    }
+
 
 }

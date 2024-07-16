@@ -1,34 +1,32 @@
 package com.jongas124.javaapi.services;
 
-import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jongas124.javaapi.models.User;
-import com.jongas124.javaapi.models.enums.ProfileEnum;
 import com.jongas124.javaapi.repositories.UserRepository;
 import com.jongas124.javaapi.services.exceptions.DataBindingViolationException;
 import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
+import com.jongas124.javaapi.util.Argon2Encoder;
 
 
 @Service
 public class UserService {
 
     @Autowired
-    private Argon2PasswordEncoder argon2PasswordEncoder;
-
-    @Autowired
     private UserRepository userRepository;
+
+    private Argon2Encoder argon2Encoder = new Argon2Encoder();
 
     @Transactional
     public User create(User obj) {
         obj.setId(null);
-        obj.setPassword(obj.getPassword());
-        obj.setProfiles(Collections.singleton(ProfileEnum.USER.getCode()));
+        obj.setPassword(argon2Encoder.encode(obj.getPassword()));
+        //obj.setProfiles();
         obj = this.userRepository.save(obj);
         return obj;
     }
@@ -45,7 +43,7 @@ public class UserService {
     @Transactional
     public User update(User obj) {
         User newObj = this.findById(obj.getId());
-        newObj.setPassword(argon2PasswordEncoder.encode(obj.getPassword()));
+        newObj.setPassword(argon2Encoder.encode(obj.getPassword()));
         return this.userRepository.save(newObj);
     }
 

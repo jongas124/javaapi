@@ -1,18 +1,19 @@
 package com.jongas124.javaapi.models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.CollectionTable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,7 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jongas124.javaapi.models.enums.ProfileEnum;
 
 @Entity
 @Table(name = "users")
@@ -42,7 +42,7 @@ public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+    @Column(name = "user_id", unique = true)
     private Long id;
 
     @Column(name = "username", length = 100, unique = true, nullable = false, updatable = false)
@@ -63,22 +63,15 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<Task>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "profile", nullable = false)
-    @CollectionTable(name = "user_profiles")
-    @NotNull(groups = {CreateUser.class, UpdateUser.class})
-    private Set<Integer> profiles = new HashSet<>();
+    @Column(name = "profile")
+    //@NotNull(groups = {CreateUser.class, UpdateUser.class})
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "users_profiles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "profile_id")
+    )
+    private Set<Profile> profiles;
 
-    public Set<ProfileEnum> getProfiles() {
-        Set<ProfileEnum> profiles = new HashSet<>();
-        for (Integer profile : this.profiles) {
-            profiles.add(ProfileEnum.toEnum(profile));
-        }
-        return profiles;
-    }
-
-    public void addProfile(ProfileEnum profileEnum) {
-        this.profiles.add(profileEnum.getCode());
-    }
 }
