@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jongas124.javaapi.models.Profile;
 import com.jongas124.javaapi.models.User;
+import com.jongas124.javaapi.repositories.ProfileRepository;
 import com.jongas124.javaapi.repositories.UserRepository;
 import com.jongas124.javaapi.services.exceptions.DataBindingViolationException;
 import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
@@ -20,13 +22,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProfileRepository profileRepository;
+
     private Argon2Encoder argon2Encoder = new Argon2Encoder();
 
     @Transactional
     public User create(User obj) {
+        Profile profile = profileRepository.findByProfile(Profile.ProfileEnum.USER.name());
         obj.setId(null);
         obj.setPassword(argon2Encoder.encode(obj.getPassword()));
-        //obj.setProfiles();
+        obj.setProfiles(Set.of(profile));
         obj = this.userRepository.save(obj);
         return obj;
     }

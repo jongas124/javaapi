@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.jongas124.javaapi.models.Profile;
 @Repository
-public interface ProfileRepository extends JpaRepository<Profile, Long> {}
+public interface ProfileRepository extends JpaRepository<Profile, Long> {
+    Profile findByProfile(String profile);
+}

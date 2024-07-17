@@ -25,15 +25,14 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "profile_id", unique = true)
     private Long id;
-    private ProfileEnum profileEnum;
+    private String profile;
 
     @AllArgsConstructor
     @Getter
     public enum ProfileEnum {
-        ADMIN(1, "ROLE_ADMIN"),
-        USER(2,"ROLE_USER");
+        ADMIN(1L),
+        USER(2L);
 
-        private Integer code;
-        private String description;
+        private Long code;
     }
 }

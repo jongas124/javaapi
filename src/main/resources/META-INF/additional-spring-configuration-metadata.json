@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "jwt.private-key",
+    "type": "java.lang.String",
+    "description": "Indica a localização da chave decodificar para decodificar os tokens JWT'"
+  },
+  {
+    "name": "jwt.public-key",
+    "type": "java.lang.String",
+    "description": "Indica a localização da chave publica para codificar os tokens JWT'"
+  }
+]}

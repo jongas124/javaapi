@@ -65,7 +65,6 @@ public class User {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "profile")
-    //@NotNull(groups = {CreateUser.class, UpdateUser.class})
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_profiles",
