@@ -2,10 +2,11 @@ package com.jongas124.javaapi.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.jongas124.javaapi.controllers.dto.TaskDescricaoDto;
 import com.jongas124.javaapi.models.Task;
 import com.jongas124.javaapi.models.User;
 import com.jongas124.javaapi.repositories.TaskRepository;
@@ -37,10 +38,12 @@ public class TaskService {
     }
 
     @Transactional
-    public Task create(Task obj) {
-        User user = this.userService.findById(obj.getUser().getId());
+    public Task create(TaskDescricaoDto taskDescricaoDto, JwtAuthenticationToken jwtAuthenticationToken) {
+        User user = this.userService.findById(Long.parseLong(jwtAuthenticationToken.getName()));
+        Task obj = new Task();
         obj.setId(null);
         obj.setUser(user);
+        obj.setDescricao(taskDescricaoDto.descricao());
         obj = this.taskRepository.save(obj);
         return obj;
     }

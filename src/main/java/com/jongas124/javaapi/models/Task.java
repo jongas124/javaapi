@@ -15,6 +15,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.GenerationType;
+
+import java.time.Instant;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 
 @Entity
@@ -41,4 +46,8 @@ public class Task {
     @NotEmpty
     @Size(min = 1, max = 255)
     private String descricao;
+
+    @CreationTimestamp
+    @Column(name = "creation_time")
+    private Instant creationTime;
 }

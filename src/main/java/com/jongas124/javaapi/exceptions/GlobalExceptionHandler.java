@@ -16,7 +16,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jongas124.javaapi.services.exceptions.DataBindingViolationException;
+import com.jongas124.javaapi.services.exceptions.InvalidCredentialsException;
 import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
+import com.jongas124.javaapi.services.exceptions.PermissionException;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +98,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 request);
     }
 
-    @ExceptionHandler()
+    @ExceptionHandler(DataBindingViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Object> handleDataBindingViolationException(
             DataBindingViolationException dataBindingViolationException,
@@ -107,6 +109,34 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 dataBindingViolationException,
                 errorMessage,
                 HttpStatus.CONFLICT,
+                request);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> handleInvalidCredentialsException(
+        InvalidCredentialsException invalidCredentialsException,
+            WebRequest request) {
+        String errorMessage = invalidCredentialsException.getMessage();
+        log.error("Usuario ou senha incorreto(s)", invalidCredentialsException);
+        return buildErrorResponse(
+                invalidCredentialsException,
+                errorMessage,
+                HttpStatus.UNAUTHORIZED,
+                request);
+    }
+
+    @ExceptionHandler(PermissionException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handlePermissionException(
+        PermissionException permissionException,
+            WebRequest request) {
+        String errorMessage = permissionException.getMessage();
+        log.error("Não é possível excluir uma task de outro usuário", permissionException);
+        return buildErrorResponse(
+                permissionException,
+                errorMessage,
+                HttpStatus.FORBIDDEN,
                 request);
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.jongas124.javaapi.controllers.dto.TaskDescricaoDto;
 import com.jongas124.javaapi.models.Task;
 import com.jongas124.javaapi.services.TaskService;
 import com.jongas124.javaapi.services.UserService;
@@ -48,10 +50,12 @@ public class TaskController {
 
     @PostMapping
     @Validated
-    public ResponseEntity<Void> create(@Valid @RequestBody Task obj) {
-        this.taskService.create(obj);
+    public ResponseEntity<Void> create(@Valid @RequestBody TaskDescricaoDto obj, 
+                                    JwtAuthenticationToken jwtAuthenticationToken) {
+        this.taskService.create(obj, jwtAuthenticationToken);
+        //mexer nessa uri
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(obj.getId()).toUri();
+        .buildAndExpand(obj).toUri();
         return ResponseEntity.created(uri).build();
     }
 

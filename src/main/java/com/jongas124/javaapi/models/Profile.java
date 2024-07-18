@@ -7,23 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "profiles")
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Profile {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profile_id", unique = true)
+    @Column(name = "profile_id")
     private Long id;
     private String profile;
 
