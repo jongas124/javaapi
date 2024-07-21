@@ -16,8 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -46,16 +45,14 @@ public class User {
     private Long id;
 
     @Column(name = "username", length = 100, unique = true, nullable = false, updatable = false)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
+    @NotBlank
     @Size(groups = CreateUser.class ,min = 4, max = 64)
     private String username;
     
-    //não permite que a senha seja exibida em uma requisição JSON
+    //não permite que a senha seja exibida em uma requisição
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
     @Column(name = "password", length = 100, nullable = false)
-    @NotNull(groups = {CreateUser.class, UpdateUser.class})
-    @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
+    @NotBlank
     @Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 100)
     private String password;
 

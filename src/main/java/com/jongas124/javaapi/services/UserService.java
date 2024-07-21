@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jongas124.javaapi.controllers.dto.LoginRequest;
+import com.jongas124.javaapi.controllers.dto.UserCreateDTO;
+import com.jongas124.javaapi.controllers.dto.UserUpdateDTO;
 import com.jongas124.javaapi.models.Profile;
 import com.jongas124.javaapi.models.User;
 import com.jongas124.javaapi.repositories.ProfileRepository;
@@ -19,6 +21,8 @@ import com.jongas124.javaapi.services.exceptions.InvalidCredentialsException;
 import com.jongas124.javaapi.services.exceptions.ObjectNotFoundException;
 import com.jongas124.javaapi.services.exceptions.PermissionException;
 import com.jongas124.javaapi.util.Argon2Encoder;
+
+import jakarta.validation.Valid;
 
 
 @Service
@@ -98,6 +102,19 @@ public class UserService {
     public boolean isAdmin(User user) {
         return user.getProfiles().stream()
         .anyMatch(profile -> profile.getProfile().equalsIgnoreCase(Profile.ProfileEnum.ADMIN.name()));
+    }
+
+    public User fromDTO(@Valid UserCreateDTO obj) {
+        User user = new User();
+        user.setUsername(obj.username());
+        user.setPassword(obj.password());
+        return user;
+    }
+
+    public User fromDTO(@Valid UserUpdateDTO obj) {
+        User user = new User();
+        user.setPassword(obj.password());
+        return user;
     }
 
 }

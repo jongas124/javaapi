@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jongas124.javaapi.controllers.dto.TaskDescricaoDto;
 import com.jongas124.javaapi.models.Task;
 import com.jongas124.javaapi.services.TaskService;
 import com.jongas124.javaapi.services.UserService;
@@ -50,7 +49,7 @@ public class TaskController {
 
     @PostMapping
     @Validated
-    public ResponseEntity<Void> create(@Valid @RequestBody TaskDescricaoDto obj, 
+    public ResponseEntity<Void> create(@Valid @RequestBody String obj, 
                                     JwtAuthenticationToken jwtAuthenticationToken) {
         this.taskService.create(obj, jwtAuthenticationToken);
         //mexer nessa uri
